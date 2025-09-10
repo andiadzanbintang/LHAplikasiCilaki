@@ -1,0 +1,1086 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --white: #FFFFFF;
+    --white2: #C1E8FF;
+    --blue-dark: #052659;
+    --blue-light: #5483B3;
+    --black: #021024;
+    --gray: #7DA0CA;
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* TUTORIAL */
+/* tutorial.css */
+
+.tutorial {
+  background-color: whitesmoke;
+  padding: 20px;
+  padding-top: 5px;
+  width: 90%;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+  left: 3.8rem;
+  top: 2rem;
+}
+
+p.dropdown-note{
+  font-style: italic;
+  font-size: 10px;
+  color: lightgrey;
+  font-weight: 600;
+}
+
+.dropdown-header{
+  border-left: 2px solid black;
+  padding-left: 20px;
+  cursor: pointer;
+  
+}
+
+
+.dropdown-arrow{
+  position: absolute;
+  right: 20px;
+  text-align: center;
+  margin: 0;
+  font-size: 1.5rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+.tutorial h2 {
+  color: #052659;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.tutorial p {
+  line-height: 1.6;
+  margin-bottom: 12px;
+  color: #021024;
+}
+
+.tutorial ul, .tutorial ol {
+  margin: 0 0 12px 20px;
+  padding-left: 20px;
+}
+
+.tutorial li {
+  margin-bottom: 8px;
+}
+
+.tutorial li strong {
+  color: #5483B3;
+}
+
+.tutorial h3 {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #021024;
+}
+
+.tutorial ul ul {
+  margin-top: 5px;
+  padding-left: 15px;
+}
+
+.tutorial em {
+  color: #7DA0CA;
+}
+
+
+/* NAVBAR */
+/* Styling untuk container navbar */
+.navbar {
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow halus */
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: fit-content;
+  margin: 20px auto;
+  top: 0;
+  right: 0;
+  z-index: 1000; /* Agar selalu di atas konten lain */
+}
+
+/* Styling ul agar menu terlihat rapi dan seimbang */
+.navbar-menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Styling untuk setiap item menu */
+.navbar-item a {
+  color: #000000; /* Warna teks hitam */
+  text-decoration: none;
+  font-weight: 300; /* Font-weight tipis */
+  font-size: 18px;
+  transition: font-weight 0.2s, color 0.2s;
+}
+
+/* Saat item aktif atau sedang di-hover */
+.navbar-item.active a,
+.navbar-item a:hover {
+  font-weight: 700; /* Bold saat aktif */
+}
+
+
+/* FORM PAGE */
+/* KONTAINER UTAMA */ 
+form {
+    width: 100%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+/* DATA DIRI */
+.data-diri {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.data-diri label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.data-diri input {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border 0.2s;
+}
+
+.data-diri input:focus {
+    border-color: black;
+    outline: none;
+}
+
+.data-diri select{
+  padding: 10px;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+}
+
+/* JUDUL TIAP LEVEL */
+h3.comparison-title{
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+p.show-value {
+    margin-bottom: 0;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+}
+
+/* COMPARISON SECTION */
+.comparison {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+
+}
+
+.comparison label {
+    font-weight: bold;
+    color: #000;
+    flex: 3;
+    text-align: center;
+}
+
+/* RANGE SLIDER */
+.range-container {
+    flex: 2;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    margin: auto;
+}
+
+.range-container input[type="range"] {
+    width: 100%;
+    appearance: none; /* Properti standar */
+    -webkit-appearance: none; /* Untuk kompatibilitas Safari/Chrome lama */
+    background: transparent;
+}
+
+.range-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: black;
+    cursor: pointer;
+}
+
+.range-container input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+}
+
+.range-container input[type="range"]:focus::-webkit-slider-runnable-track {
+    background-color: black;
+}
+
+/* RANGE LABELS */
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    width: 100%;
+    top: 30px; /* Agar tidak menimpa slider */
+}
+
+.range-label {
+    font-size: 0.8rem;
+    color: #666;
+    width: calc(100% / 20);
+    text-align: center;
+}
+
+.form-btn{
+    width: 100%;
+    background-color: black;
+    color: white;
+    border: none;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.slider-value {
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    position: relative;
+    top: 50px;
+}
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .comparison {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .comparison label {
+        text-align: left;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* INDIKATOR PAGE */
+.indikator-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    padding: 5rem;
+    /* background-color: #f5f5f5;  */
+}
+
+/* Grup untuk setiap level */
+.indikator-group {
+    margin: 3rem 0;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Judul utama */
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Setiap item indikator */
+.indikator-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin: 1rem;
+}
+
+
+/* Layout untuk tiap level */
+.lvl-1-group,
+.lvl-2-group,
+.lvl-3-group {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/* Membatasi maksimal 3 item per baris */
+.lvl-1-group .indikator-item,
+.lvl-2-group .indikator-item,
+.lvl-3-group .indikator-item {
+    flex: 1 1 calc(33% - 2rem); /* Tiga kolom dengan jarak */
+    margin: 1rem;
+}
+
+
+/* Deskripsi indikator */
+.description {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+
+/* USER DASHBOARD */
+/* all result */
+.all-result-container {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+  }
+  
+  .result-container {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .level-1, .level-2 {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+    margin-bottom: 0;
+  }
+  
+  .level-1 {
+    grid-template-columns: repeat(2, 1fr); /* Level 1 terbesar */
+  }
+  
+  .level-2 {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
+    grid-template-rows: repeat(2, 1fr); /* 2 baris */
+    gap: 1rem;
+  }
+  
+  .level-3 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 12 item dengan 6 kolom */
+    gap: 0.75rem;
+  }
+  
+  .result-item li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+  }
+
+  .result-item li:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+
+  .level-1 .IFE {
+    background-color: #B6CFF7;
+  }
+
+  .level-1 .ISL {
+    background-color: #A3E0D6;
+  }
+  
+  .level-2 .Financial,
+  .level-2 .Economy {
+    background-color: #B6CFF7;
+    color: var(--black);
+  }
+  .level-2 .Social,
+  .level-2 .Environment {
+    background-color: #A3E0D6;
+    color: var(--black);
+  }
+
+  .level-3 .FNPV,
+  .level-3 .FNBC,
+  .level-3 .FIRR{
+    background-color: #CADEFC;
+  }
+  
+  .level-3 .ENPV,
+  .level-3 .ENBC,
+  .level-3 .EIRR,
+  .level-3 .Multiplier,
+  .level-3 .PDRB,
+  .level-3 .Backward,
+  .level-3 .Forward
+  {
+    background-color: #E0ECFF;
+  }
+
+  .level-3 .Serapan,
+  .level-3 .JumlahPenerima{
+    background-color: #D4F7F2;
+  }
+  
+  .level-3 li {
+    flex-direction: row; /* Level 3 posisi row */
+    justify-content: space-between;
+  }
+  .level-1 h1{
+    font-size: 4rem;
+  }
+
+  .level-1 h2{
+    color: black;
+  }
+  .level-2 h2{
+    color: black;
+  }
+
+  .level-2 h3{
+    font-size: 2rem;
+  }
+
+  .level-3 h4{
+    margin-right: 5px;
+  }
+  h2, h3, h4 {
+    margin: 0.5rem 0;
+  }
+  
+  .iteration-selector {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    position: relative;
+    right: 40px;
+    top: 20px;
+
+  }
+  
+  .iteration-selector span {
+    margin-right: 1rem;
+    display: none;
+    transform: translateY(5px);
+  }
+  
+  .iteration-buttons button {
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .iteration-buttons button:hover {
+    background-color: #7DA0CA;
+  }
+  
+
+
+/* COMPARISONS */
+.comparisons-container {
+    margin: 20px;
+  }
+  
+  .comparisons-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .comparisons-table th, .comparisons-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .comparisons-table th {
+    background-color: #f2f2f2;
+  }
+
+  .iteration-group {
+    margin-bottom: 30px; /* Jarak antar grup iterasi */
+  }
+
+
+/* Dashboard Container */
+.dashboard-container{
+  position: relative;
+}
+
+.ahp-nav-btn{
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  border: none;
+  background-color: black;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.ahp-nav-btn:hover{
+  box-shadow: rgba(113, 113, 125, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.all-result-head{
+  width: fit-content;
+  text-align: left;
+  font-weight: 500;
+  position: absolute;
+  left: 5rem;
+  top: 5rem;
+  font-size: 1.5rem;
+
+  padding-left: 20px;
+  border-left: 2px solid var(--blue-dark);
+}
+
+/* DUMMY */
+/* Grid container khusus untuk komponen WeightsDisplay */
+/* Grid container khusus untuk komponen WeightsDisplay */
+.weights-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 item per baris */
+  gap: 20px; /* Jarak antar item */
+  justify-content: center; /* Pusatkan item secara horizontal */
+  padding: 20px;
+}
+
+/* Item grid dengan lebar maksimal 400px */
+.weights-grid-item {
+  width: 100%;
+  max-width: 400px; /* Batas lebar per item */
+  text-align: center;
+  border: 2px solid black;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto; /* Agar item tetap berada di tengah */
+}
+
+/* Nama indikator */
+.weights-indicator-name {
+  margin: 0 0 10px 0;
+  color: #052659;
+  font-size: 18px;
+}
+
+/* Nilai indikator */
+.weights-indicator-value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #021024;
+}
+
+/* Tooltip */
+.tooltip-icon {
+  font-size: 12px;
+  background-color: whitesmoke;
+  color: black;
+  padding: 3px 10px;
+  border-radius: 50%;
+  font-weight: 400;
+  display: none;
+
+  cursor: pointer; /* Agar terlihat seperti bisa diklik */
+  margin-left: 5px; /* Spasi antara label dan ikon */
+}
+
+/* Custom Slider */
+/* Custom Slider */
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 320px; /* Lebar slider sedikit diperbesar untuk memberi ruang label */
+  margin: 20px;
+  position: relative;
+}
+
+.scale-labels {
+  position: absolute;
+  width: 100%;
+  top: 20px; /* Jarak dari slider */
+  display: flex;
+  justify-content: space-between; /* Sebar label secara merata */
+  pointer-events: none; /* Agar label tidak mengganggu mouse events */
+}
+
+.scale-label {
+  position: absolute;
+  text-align: center;
+  font-size: 12px; /* Ukuran font untuk label */
+  width: 16px; /* Lebar label agar posisinya tepat */
+  margin-left: -8px; /* Geser ke kiri untuk membuatnya berada di tengah */
+}
+
+.custom-slider-track {
+  position: relative;
+  width: calc(100% - 16px); /* Kurangi lebar untuk mengimbangi ukuran thumb */
+  height: 8px;
+  background: #ddd; /* Warna latar belakang track */
+  border-radius: 5px; /* Sudut membulat */
+  cursor: pointer;
+}
+
+.custom-slider-thumb {
+  position: absolute;
+  width: 16px; /* Lebar thumb */
+  height: 16px; /* Tinggi thumb */
+  background: #5483B3; /* Warna thumb */
+  border-radius: 50%; /* Bulat */
+  top: -4px; /* Atur jarak vertikal thumb */
+  transform: translateX(-50%); /* Pastikan thumb berada di tengah */
+  transition: background 0.3s;
+}
+
+.custom-slider-thumb:hover {
+  background: #7DA0CA; /* Warna saat hover */
+}
+
+.slider-value {
+  margin-top: -35px; /* Ruang antara slider dan nilai */
+  font-weight: bold; /* Membuat nilai lebih tegas */
+}
+
+/* ADMIN LOGIN */
+/* Login Container */
+.login-container {
+  background-color: #FFFFFF; /* Putih */
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Title */
+.login-title {
+  text-align: center;
+  color: #052659; /* Biru1 */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Item */
+.form-login-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-login-item label {
+  color: #021024; /* Hitam */
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.form-login-item input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #7DA0CA; /* Abu */
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-login-item input:focus {
+  border-color: #5483B3; /* Biru2 */
+}
+
+/* Login Button */
+.login-btn {
+  background-color: #052659; /* Biru1 */
+  color: #FFFFFF;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #5483B3; /* Biru2 */
+}
+
+.set-iteration-container {
+  background-color: #FFFFFF; /* Putih */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  left: 20px;
+}
+
+/* Title */
+.set-iteration-container h2 {
+  color: #052659; /* Biru1 */
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Loading and Iteration Text */
+.set-iteration-container p {
+  color: #021024; /* Hitam */
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+/* Form */
+.set-iteration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.set-iteration-form label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #021024;
+  text-align: left;
+}
+
+/* Input */
+.set-iteration-form input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #7DA0CA; /* Abu */
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.set-iteration-form input:focus {
+  border-color: #5483B3; /* Biru2 */
+}
+
+/* Button */
+.set-iteration-btn {
+  background-color: #052659; /* Biru1 */
+  color: #FFFFFF;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.set-iteration-btn:hover {
+  background-color: #5483B3; /* Biru2 */
+}
+
+.set-iteration-btn:disabled {
+  background-color: #7DA0CA; /* Abu */
+  cursor: not-allowed;
+}
+
+
+/* FORM INDIKATOR */
+.indicator-form-description{
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.admin-dashboard-title{
+  padding-left: 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 1.5rem;
+  transform: translateX(20px);
+  
+  border-left: 2px solid var(--blue-dark);
+}
+
+
+/* Responsif */
+@media (max-width: 768px) {
+  /* HALAMAN INDIKATOR */
+  .lvl-1-group, .lvl-2-group {
+      flex-direction: column;
+  }
+
+  .lvl-1-group .indikator-item,
+  .lvl-2-group .indikator-item,
+  .lvl-3-group .indikator-item {
+      flex: 1 1 calc(50% - 2rem); /* Dua kolom */
+  }
+
+  /* FORM */
+  .comparison {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .comparison label {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .range-container {
+    margin: 0 10px;
+  }
+
+  /* ADMIN */
+  .login-container {
+    padding: 30px;
+  }
+
+  .login-title {
+    font-size: 20px;
+  }
+
+  .form-login-item input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .login-btn {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .set-iteration-container {
+    padding: 30px;
+  }
+
+  .set-iteration-container h2 {
+    font-size: 20px;
+  }
+
+  .set-iteration-form input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .set-iteration-btn {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar{
+    transform: translateX(70px);
+  }
+
+  .tutorial{
+    width: 100%;
+  }
+  /* HALAMAN INDIKATOR */
+  .lvl-1-group, .lvl-2-group {
+      flex-direction: column;
+  }
+
+  .lvl-1-group .indikator-item,
+  .lvl-2-group .indikator-item,
+  .lvl-3-group .indikator-item {
+      flex: 1 1 100%; /* Satu kolom penuh */
+  }
+
+  h2 {
+      font-size: 2rem;
+  }
+
+  /* FORM */
+  .comparison {
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .comparison label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  .comparison label:nth-child(3){
+    position: absolute;
+    text-align: right;
+  }
+
+  .comparison label span{
+    display: none;
+  }
+
+  label.social-indicator, label.social-indicator span{
+    font-size: 11px;
+  }
+
+  .range-container {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  /* RESULT CONTAINER */
+.result-container {
+    grid-template-columns: 1fr; /* Satu kolom */
+}
+
+.level-1, .level-2 {
+    grid-template-columns: 1fr; /* Satu kolom */
+}
+
+.level-1 {
+    margin-bottom: 1rem; /* Spasi antara Level 1 dan Level 2 */
+}
+
+.level-3 {
+    grid-template-columns: repeat(3, 1fr); /* Atur ulang agar lebih pas di layar kecil */
+}
+
+/* All Result */
+.all-result-head {
+  display: block;
+  font-size: 1.2rem;
+  transform: translateY(15px)
+}
+
+.iteration-selector{
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+
+  transform: translateX(250px) translateY(40px);
+}
+
+.iteration-selector span{
+  padding-left: 10px;
+  font-size: 12px;
+  display: none;
+}
+
+.iteration-selector button{
+  font-size: 12px;
+  padding: 8px 9px;
+}
+
+.dropdown-header{
+  font-size: 18px;
+}
+
+/* Indicator page */
+.description {
+  font-size: 0.8rem;
+}
+}
+
+@media (max-width: 368px) {
+    /* FORM */
+    .comparison {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+  
+    .comparison label {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+  
+    .comparison label:nth-child(3){
+      position: absolute;
+      text-align: right;
+      top: 0;
+    }
+
+    .comparison label span{
+      display: none;
+    }
+  
+    .range-container {
+      margin: auto;
+      left: -28px;
+    }
+    input {
+      width: 100%;
+    }
+
+    .description {
+      font-size: 0.75rem;
+    }
+
+    .tutorial{
+      width: 135%;
+    }
+
+    .all-result-head{
+      width: 100%;
+      transform: translateY(-0.5px);
+    }
+
+    .navbar{
+      transform: translateX(120px);
+    }
+}
