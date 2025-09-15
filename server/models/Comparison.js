@@ -23,5 +23,5 @@ const comparisonSchema = new mongoose.Schema({
   level_2: [levelSchema],                        // Array untuk menyimpan level 2: Finansial vs Ekonomi, Sosial vs Lingkungan
   level_3: [levelSchema]                         // Array untuk menyimpan level 3: Perbandingan antar indikator di setiap sub-kriteria
 });
-
+ 
 module.exports = mongoose.model('Comparison', comparisonSchema);

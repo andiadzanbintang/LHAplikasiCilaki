@@ -16,33 +16,22 @@ const ahpResultSchema = new mongoose.Schema({
     Social: Number,
     Environment: Number,
   },
-  // Level 3 sesuai kesepakatan: IFE (12) + ISL (10)
+
+  // 🔧 UBAH: dari field kaku IFE1..IFE12, ISL1..ISL10 → Map dinamis
+  // Tetap kompatibel: cukup assign object biasa, Mongoose akan menyimpannya sebagai Map.
   level3Weights: {
-    // IFE
-    IFE1: Number,
-    IFE2: Number,
-    IFE3: Number,
-    IFE4: Number,
-    IFE5: Number,
-    IFE6: Number,
-    IFE7: Number,
-    IFE8: Number,
-    IFE9: Number,
-    IFE10: Number,
-    IFE11: Number,
-    IFE12: Number,
-    // ISL
-    ISL1: Number,
-    ISL2: Number,
-    ISL3: Number,
-    ISL4: Number,
-    ISL5: Number,
-    ISL6: Number,
-    ISL7: Number,
-    ISL8: Number,
-    ISL9: Number,
-    ISL10: Number,
+    type: Map,
+    of: {
+      type: Number,
+      // (opsional) jaga range 0..1
+      validate: {
+        validator: (v) => v >= 0 && v <= 1,
+        message: 'Level 3 weight harus berada di rentang [0, 1].',
+      },
+    },
+    default: {},
   },
+
   createdAt: {
     type: Date,
     default: Date.now,

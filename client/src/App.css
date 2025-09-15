@@ -853,6 +853,48 @@ h2 {
   border-left: 2px solid var(--blue-dark);
 }
 
+/* ADMIN */
+.dashboard-container {
+  padding: 20px;
+}
+
+.indicator-container {
+  margin-top: 20px;
+}
+
+.indicator-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.indicator-form input,
+.indicator-form select {
+  padding: 5px;
+}
+
+.indicator-form button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.indicator-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.indicator-table th,
+.indicator-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.indicator-table th {
+  background-color: #f4f4f4;
+}
+
+
 
 /* Responsif */
 @media (max-width: 768px) {

@@ -5,6 +5,7 @@ import './App.css'
 import Dashboard from './pages/Dashboard';
 import FormPages from './pages/FormPages';
 import Navbar from './components/Navbar';
+import AdminDashboard from './pages/AdminDashboard';
 
 axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 axios.defaults.withCredentials = true;
@@ -23,6 +24,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Dashboard />} />
         <Route path='/form' element={<FormPages />} />
+        {/* <Route path='/playform' element={<PlayFormPages />} /> */}
+        <Route path='/admin' element={<AdminDashboard />} />
       </Routes>
     </>
   )

@@ -1,79 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 
-// === Daftar indikator (lengkap 22) dengan kode ===
-const indikatorData = [
-  { code: "IFE1",  title: "Dampak terhadap pengembangan ekonomi lokal",
-    description: "Mengukur kontribusi proyek dalam mengembangkan potensi ekonomi daerah.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin besar kontribusi, semakin baik"] },
-  { code: "IFE2",  title: "Dampak terhadap keuntungan ekonomi jangka panjang",
-    description: "Mengukur keberlanjutan keuntungan ekonomi dari proyek.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin tinggi keberlanjutan, semakin baik"] },
-  { code: "IFE3",  title: "Dampak terhadap pemanfaatan sumber daya lokal",
-    description: "Mengukur sejauh mana proyek menggunakan sumber daya lokal.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin besar pemanfaatan lokal, semakin baik"] },
-  { code: "IFE4",  title: "Kontribusi terhadap kehidupan lebih baik warga kota",
-    description: "Mengukur dampak proyek terhadap kualitas hidup masyarakat.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin positif dampaknya, semakin baik"] },
-  { code: "IFE5",  title: "Dampak multiplier & jejaring ekonomi/industri lain",
-    description: "Mengukur seberapa besar proyek memicu efek pengganda ekonomi.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin tinggi multiplier, semakin baik"] },
-  { code: "IFE6",  title: "Penerimaan langsung dari proyek",
-    description: "Mengukur penerimaan (revenue) yang diperoleh langsung dari proyek.",
-    unit: ["Rp"], kriteria: ["Semakin tinggi penerimaan, semakin baik"] },
-  { code: "IFE7",  title: "Pengaruh terhadap alokasi anggaran berjalan",
-    description: "Mengukur apakah proyek mengganggu atau mendukung alokasi anggaran rutin.",
-    unit: ["Skor 0–1"], kriteria: ["Tidak mengganggu anggaran rutin"] },
-  { code: "IFE8",  title: "Pengalokasian proyek di dalam APBD/APBN",
-    description: "Mengukur kesiapan proyek dimasukkan dalam anggaran pemerintah.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin jelas alokasinya, semakin baik"] },
-  { code: "IFE9",  title: "Kebutuhan dukungan eksternal",
-    description: "Mengukur ketergantungan proyek pada dukungan eksternal.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin rendah ketergantungan, semakin baik"] },
-  { code: "IFE10", title: "Risiko finansial/ekonomi terhadap keberlanjutan proyek",
-    description: "Mengidentifikasi potensi risiko finansial atau ekonomi.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin rendah risiko, semakin baik"] },
-  { code: "IFE11", title: "Risiko politik terhadap keberlanjutan proyek",
-    description: "Mengukur sejauh mana stabilitas politik memengaruhi proyek.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin rendah risiko politik, semakin baik"] },
-  { code: "IFE12", title: "Strategi mitigasi risiko dalam penyelenggaraan proyek",
-    description: "Menilai kesiapan mitigasi risiko yang disiapkan proyek.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin lengkap mitigasi, semakin baik"] },
-
-  { code: "ISL1",  title: "Dampak terhadap kualitas lingkungan sekitar",
-    description: "Mengukur dampak proyek pada kualitas lingkungan (air, udara, tanah).",
-    unit: ["Skor 0–1"], kriteria: ["Dampak positif lebih tinggi lebih baik"] },
-  { code: "ISL2",  title: "Kontribusi dalam keberlanjutan jangka panjang",
-    description: "Mengukur keberlanjutan proyek untuk lingkungan.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin tinggi kontribusi, semakin baik"] },
-  { code: "ISL3",  title: "Kontribusi terhadap kesehatan masyarakat lokal",
-    description: "Mengukur pengaruh proyek pada kesehatan publik.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin besar kontribusi, semakin baik"] },
-  { code: "ISL4",  title: "Kontribusi terhadap adaptasi perubahan iklim",
-    description: "Menilai kontribusi proyek dalam adaptasi perubahan iklim.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin adaptif, semakin baik"] },
-  { code: "ISL5",  title: "Kontribusi terhadap mitigasi perubahan iklim",
-    description: "Menilai kontribusi proyek dalam mengurangi emisi atau risiko iklim.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin tinggi kontribusi mitigasi, semakin baik"] },
-  { code: "ISL6",  title: "Kontribusi peningkatan kualitas ruang publik kota",
-    description: "Mengukur dampak proyek pada kualitas ruang publik.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin positif dampaknya, semakin baik"] },
-  { code: "ISL7",  title: "Dampak/risiko terhadap keanekaragaman hayati",
-    description: "Menilai apakah proyek mengancam atau mendukung biodiversitas.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin kecil risiko, semakin baik"] },
-  { code: "ISL8",  title: "Inovasi/keterbaruan untuk perbaikan masa depan",
-    description: "Mengukur tingkat inovasi proyek untuk keberlanjutan.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin tinggi inovasi, semakin baik"] },
-  { code: "ISL9",  title: "Dampak ke masyarakat akibat alih fungsi lahan",
-    description: "Mengukur dampak sosial akibat perubahan penggunaan lahan.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin kecil dampak negatif, semakin baik"] },
-  { code: "ISL10", title: "Perbaikan lingkungan masyarakat berpenghasilan rendah",
-    description: "Mengukur manfaat proyek bagi masyarakat berpenghasilan rendah.",
-    unit: ["Skor 0–1"], kriteria: ["Semakin besar manfaat, semakin baik"] },
-];
-
-// ===== UI Helpers: Skeleton & Empty State (Tampilan saja) =====
+/* ===== UI Helpers: Skeleton & Empty State (tetap) ===== */
 const PlaceholderRow = () => (
   <tr>
     <td style={{ padding: 8 }}>
@@ -135,7 +64,6 @@ const EmptyState = ({ message = "Belum ada data perhitungan.", onRetry }) => (
       </button>
     )}
 
-    {/* tampilkan placeholder tabel agar tetap informatif dan menarik */}
     <div className="tables-wrapper" style={{ display: "grid", gap: 24, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", marginTop: 24 }}>
       <PlaceholderTable title="Indeks Finansial & Ekonomi (IFE)" />
       <PlaceholderTable title="Indeks Sosial & Lingkungan (ISL)" />
@@ -144,87 +72,139 @@ const EmptyState = ({ message = "Belum ada data perhitungan.", onRetry }) => (
 );
 
 
-const CITY_BY_ITERATION = ["Bitung", "Jakarta", "Palembang", "Balikpapan", "Semarang"];
-
 export default function AllResult() {
+  // === state hasil & iterasi ===
   const [results, setResults] = useState([]);
   const [selectedIteration, setSelectedIteration] = useState(0);
+
+  // === state indikator dinamis ===
+  const [indicators, setIndicators] = useState([]); // [{_id, name, description, category}, ...]
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // === dialog detail indikator ===
   const [openDialog, setOpenDialog] = useState(false);
-  const [dialogData, setDialogData] = useState({ title: "", description: "" });
+  const [dialogData, setDialogData] = useState({ title: "", description: "", unit: null, kriteria: null });
 
   const formatNumber = (val) => {
     const n = Number(val);
     return Number.isFinite(n) ? n.toFixed(4) : "0.0000";
   };
 
-  const fetchFinalWeights = async () => {
+  const fetchAll = async () => {
     try {
-      await axios.get("/api/v1/form/calculate");          // memicu perhitungan
-      const response = await axios.get("/api/v1/form/getAllResult");
-      setResults(response.data.result || []);
+      // 1) trigger kalkulasi (server akan menyimpan AHPResult iterasi terbaru)
+      await axios.get("/api/v1/form/calculate");
+
+      // 2) ambil hasil & indikator paralel
+      const [resResults, resIndicators] = await Promise.all([
+        axios.get("/api/v1/form/getAllResult"),
+        axios.get("/api/v1/admin/indicators"),
+      ]);
+
+      const listResults = Array.isArray(resResults?.data?.result) ? resResults.data.result : [];
+      const listIndicators = Array.isArray(resIndicators?.data?.data) ? resIndicators.data.data : [];
+
+      setResults(listResults);
+      setIndicators(listIndicators);
+
+      // pilih iterasi terbaru secara otomatis bila ada
+      if (listResults.length > 0) {
+        const latest = Math.max(...listResults.map((r) => Number(r.iteration) || 0));
+        setSelectedIteration(latest);
+      }
+
       setLoading(false);
     } catch (err) {
-      setError("Error fetching AHP final weights.", err);
+      console.error(err);
+      setError("Error fetching AHP final weights.");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFinalWeights();
+    fetchAll();
   }, []);
 
+    // ==== pemetaan indikator per kategori (dinamis) ====
+  const { indikatorIFE, indikatorISL } = useMemo(() => {
+    const IFE = indicators.filter((x) => x.category === "IFE");
+    const ISL = indicators.filter((x) => x.category === "ISL");
+    return { indikatorIFE: IFE, indikatorISL: ISL };
+  }, [indicators]);
+
   if (loading) return <LoadingState />;
-  if (error) return <EmptyState message="Saat ini data belum bisa dimuat." onRetry={fetchFinalWeights} />;
-  if (results.length === 0) return <EmptyState onRetry={fetchFinalWeights} />;
+  if (error) return <EmptyState message="Saat ini data belum bisa dimuat." onRetry={fetchAll} />;
+  if (results.length === 0) return <EmptyState onRetry={fetchAll} />;
 
-
+  // ==== ambil dokumen hasil sesuai iterasi terpilih ====
   const result = results.find((r) => r.iteration === selectedIteration) || {};
 
-  const handleIndicatorClick = (title) => {
-    const indicator = indikatorData.find((ind) => ind.title === title);
-    if (indicator) {
-      setDialogData(indicator);
-      setOpenDialog(true);
-    }
+  // ==== akses bobot: pakai name (dinamis), fallback code kalau ada ====
+  const getWeight = (ind) => {
+    const obj = result?.level3Weights || {};
+    // prefer name (karena pairwise & perhitungan pakai name)
+    if (ind?.name && obj[ind.name] != null) return Number(obj[ind.name]) || 0;
+    // fallback code kalau server kebetulan pakai kode
+    if (ind?.code && obj[ind.code] != null) return Number(obj[ind.code]) || 0;
+    return 0;
+  };
+
+  const totalIFE = indikatorIFE.reduce((s, ind) => s + getWeight(ind), 0);
+  const totalISL = indikatorISL.reduce((s, ind) => s + getWeight(ind), 0);
+
+  // ==== dialog: klik baris indikator ====
+  const handleIndicatorClick = (ind) => {
+    setDialogData({
+      title: ind?.name || "-",
+      description: ind?.description || "Belum ada deskripsi indikator.",
+      // unit & kriteria tidak ada di schema indikator bawaan → biarkan null / tampil jika ada
+      unit: ind?.unit || null,
+      kriteria: ind?.kriteria || null,
+    });
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setDialogData({ title: "", description: "" });
+    setDialogData({ title: "", description: "", unit: null, kriteria: null });
   };
-
-  // === PEMISAHAN DATA UNTUK TAMPILAN TABEL ===
-  const indikatorIFE = indikatorData.filter(ind => ind.code.startsWith("IFE"));
-  const indikatorISL = indikatorData.filter(ind => ind.code.startsWith("ISL"));
-  const getWeight = (code) => Number(result.level3Weights?.[code]) || 0;
-
-  const totalIFE = indikatorIFE.reduce((s, ind) => s + getWeight(ind.code), 0);
-  const totalISL = indikatorISL.reduce((s, ind) => s + getWeight(ind.code), 0);
 
   return (
     <div className="all-result-container">
       <h3 className="all-result-head">
-        Hasil Perhitungan AHP Kota {CITY_BY_ITERATION[selectedIteration] ?? "—"}
+        Hasil Perhitungan AHP – Iterasi {selectedIteration}
       </h3>
 
       {/* Pilih Iterasi */}
-      <div className="iteration-selector">
+      <div className="iteration-selector" style={{ marginBottom: 16 }}>
         <span>Pilih Iterasi:</span>
-        <div className="iteration-buttons">
+        <div
+          className="iteration-buttons"
+          style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}
+        >
           {results.map((res) => (
             <button
               key={res.iteration}
               onClick={() => setSelectedIteration(res.iteration)}
+              style={{
+                padding: "6px 10px",
+                borderRadius: 8,
+                border: "1px solid #e5e7eb",
+                background:
+                  res.iteration === selectedIteration ? "#111827" : "white",
+                color: res.iteration === selectedIteration ? "white" : "#111827",
+                cursor: "pointer",
+              }}
+              title={`Iterasi ${res.iteration}`}
             >
-              {CITY_BY_ITERATION[res.iteration] ?? `Iterasi ${res.iteration}`}
+              {`Iterasi ${res.iteration}`}
             </button>
           ))}
         </div>
       </div>
 
-      {/* === TAMPILAN: TABEL TERPISAH IFE & ISL === */}
+      {/* === TAMPILAN: TABEL TERPISAH IFE & ISL (DINAMIS) === */}
       <div className="tables-wrapper" style={{ display: "grid", gap: 24, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }}>
         {/* Tabel IFE */}
         <div className="table-card">
@@ -237,17 +217,17 @@ export default function AllResult() {
               </tr>
             </thead>
             <tbody>
-              {indikatorIFE.map(ind => (
-                <tr key={ind.code}>
+              {indikatorIFE.map((ind) => (
+                <tr key={ind._id || ind.name}>
                   <td
                     style={{ padding: "8px", cursor: "pointer" }}
-                    onClick={() => handleIndicatorClick(ind.title)}
+                    onClick={() => handleIndicatorClick(ind)}
                     title="Klik untuk detail"
                   >
-                    {ind.title}
+                    {ind.name}
                   </td>
                   <td style={{ padding: "8px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-                    {formatNumber(getWeight(ind.code))}
+                    {formatNumber(getWeight(ind))}
                   </td>
                 </tr>
               ))}
@@ -272,17 +252,17 @@ export default function AllResult() {
               </tr>
             </thead>
             <tbody>
-              {indikatorISL.map(ind => (
-                <tr key={ind.code}>
+              {indikatorISL.map((ind) => (
+                <tr key={ind._id || ind.name}>
                   <td
                     style={{ padding: "8px", cursor: "pointer" }}
-                    onClick={() => handleIndicatorClick(ind.title)}
+                    onClick={() => handleIndicatorClick(ind)}
                     title="Klik untuk detail"
                   >
-                    {ind.title}
+                    {ind.name}
                   </td>
                   <td style={{ padding: "8px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-                    {formatNumber(getWeight(ind.code))}
+                    {formatNumber(getWeight(ind))}
                   </td>
                 </tr>
               ))}
@@ -297,12 +277,13 @@ export default function AllResult() {
         </div>
       </div>
 
-      {/* Dialog Box */}
+      {/* Dialog Detail Indikator */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>{dialogData.title}</DialogTitle>
         <DialogContent>
           <p>{dialogData.description}</p>
-          {dialogData.unit && (
+
+          {dialogData.unit && Array.isArray(dialogData.unit) && (
             <div>
               <h4>Unit:</h4>
               <ul>
@@ -312,7 +293,8 @@ export default function AllResult() {
               </ul>
             </div>
           )}
-          {dialogData.kriteria && (
+
+          {dialogData.kriteria && Array.isArray(dialogData.kriteria) && (
             <div>
               <h4>Kriteria:</h4>
               <ul>

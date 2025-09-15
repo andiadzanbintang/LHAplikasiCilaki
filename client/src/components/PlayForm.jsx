@@ -15,57 +15,7 @@ const buildDefaultPairs = (keys) => {
   return obj;
 };
 
-// Random Index table dari Saaty
-  const RI_TABLE = {
-    1: 0, 2: 0, 3: 0.58, 4: 0.90, 5: 1.12,
-    6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49
-  };
-
-  // Bangun matriks dari pairwise comparisons
-  const buildMatrix = (keys, comparisons) => {
-    const n = keys.length;
-    const matrix = Array.from({ length: n }, () => Array(n).fill(1));
-
-    keys.forEach((k1, i) => {
-      keys.forEach((k2, j) => {
-        if (i === j) return;
-        const key = `${k1}_${k2}`;
-        const keyRev = `${k2}_${k1}`;
-        let v = comparisons[key] ?? (comparisons[keyRev] ? 1 / comparisons[keyRev] : 1);
-        if (!Number.isFinite(v) || v <= 0) v = 1;
-        matrix[i][j] = v;
-      });
-    });
-
-    return matrix;
-  };
-
-  // Normalisasi & bobot rata-rata baris
-  const calculateWeights = (matrix) => {
-    const n = matrix.length;
-    const colSums = Array(n).fill(0);
-    matrix.forEach(row => row.forEach((val, j) => colSums[j] += val));
-
-    const normalized = matrix.map(row => row.map((val, j) => val / (colSums[j] || 1)));
-    return normalized.map(row => row.reduce((a, b) => a + b, 0) / n);
-  };
-
-  // Hitung Consistency Ratio
-  const calculateCR = (matrix, weights) => {
-    const n = matrix.length;
-    if (n < 3) return 0; // matriks kecil selalu konsisten
-
-    const weightedSum = matrix.map(row =>
-      row.reduce((sum, val, j) => sum + val * weights[j], 0)
-    );
-
-    const lambdaMax = weightedSum.reduce((s, val, i) => s + val / weights[i], 0) / n;
-    const CI = (lambdaMax - n) / (n - 1);
-    const RI = RI_TABLE[n] || 1.49;
-    return CI / RI;
-  };
-
-const Form = () => {
+const PlayForm = () => {
   const navigate = useNavigate();
 
   // data diri
@@ -79,11 +29,6 @@ const Form = () => {
 
   // pairwise Level 3 (dinamis)
   const [level3, setLevel3] = useState({});
-
-  // live CR state
-  const [crIFE, setCrIFE] = useState(0);
-  const [crISL, setCrISL] = useState(0);
-
 
   useEffect(() => {
     let mounted = true;
@@ -131,26 +76,6 @@ const Form = () => {
     }));
   }, [loadingInd, IFE_KEYS, ISL_KEYS]);
 
-    // hitung CR live setiap kali level3 berubah
-  useEffect(() => {
-    const adjustedLevel3 = Object.keys(level3).reduce((acc, k) => {
-      acc[k] = adjustValue(level3[k] ?? 1);
-      return acc;
-    }, {});
-
-    if (IFE_KEYS.length >= 3) {
-      const mIFE = buildMatrix(IFE_KEYS, adjustedLevel3);
-      const wIFE = calculateWeights(mIFE);
-      setCrIFE(calculateCR(mIFE, wIFE));
-    }
-
-    if (ISL_KEYS.length >= 3) {
-      const mISL = buildMatrix(ISL_KEYS, adjustedLevel3);
-      const wISL = calculateWeights(mISL);
-      setCrISL(calculateCR(mISL, wISL));
-    }
-  }, [level3, IFE_KEYS, ISL_KEYS]);
-
   const validateInput = () => {
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name) return toast.error("Nama tidak boleh kosong."), false;
@@ -178,7 +103,6 @@ const Form = () => {
     return v;
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateInput()) return;
@@ -190,23 +114,6 @@ const Form = () => {
       acc[k] = adjustValue(level3[k] ?? 1);
       return acc;
     }, {});
-
-    // ====== CEK CONSISTENCY RATIO ======
-    const matrixIFE = buildMatrix(IFE_KEYS, adjustedLevel3);
-    const weightsIFE = calculateWeights(matrixIFE);
-    const CR_IFE = calculateCR(matrixIFE, weightsIFE);
-
-    const matrixISL = buildMatrix(ISL_KEYS, adjustedLevel3);
-    const weightsISL = calculateWeights(matrixISL);
-    const CR_ISL = calculateCR(matrixISL, weightsISL);
-
-    console.log("CR IFE:", CR_IFE, "CR ISL:", CR_ISL);
-
-    if (CR_IFE > 0.1 || CR_ISL > 0.1) {
-      return toast.error(
-        `Konsistensi terlalu rendah. CR IFE=${CR_IFE.toFixed(3)}, CR ISL=${CR_ISL.toFixed(3)}`
-      );
-    }
 
     const data = {
       name,
@@ -232,6 +139,7 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit}>
       {/* Data Diri */}
+      <h1>PLAYFORM</h1>
       <div className="data-diri">
         <label>Nama</label>
         <input required type="text" value={name} onChange={(e) => setName(e.target.value)} />
@@ -294,36 +202,8 @@ const Form = () => {
       )}
 
       <button type="submit">Submit</button>
-
-      {/* Floating CR Panel */}
-      <div
-        className="floating-cr"
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          background: "white",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "12px 16px",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
-          zIndex: 1000,
-        }}
-      >
-        <p style={{ margin: 0, fontWeight: "bold" }}>Consistency Ratio</p>
-        <p style={{ margin: "4px 0" }}>
-          IFE: {crIFE.toFixed(3)}{" "}
-          {crIFE > 0.1 && <span style={{ color: "red" }}>❌</span>}
-          {crIFE <= 0.1 && <span style={{ color: "green" }}>✔</span>}
-        </p>
-        <p style={{ margin: 0 }}>
-          ISL: {crISL.toFixed(3)}{" "}
-          {crISL > 0.1 && <span style={{ color: "red" }}>❌</span>}
-          {crISL <= 0.1 && <span style={{ color: "green" }}>✔</span>}
-        </p>
-      </div>
     </form>
   );
 };
 
-export default Form;
+export default PlayForm;
