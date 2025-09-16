@@ -63,11 +63,7 @@ export default function Tutorial() {
             <li>
               <strong>Isi Penilaian Indikator</strong>
               <br />
-              Berikan penilaian perbandingan antar indikator. Lihat link{" "}
-              <a href="/indikator" style={{ fontStyle: "italic" }}>
-                Indikator
-              </a>{" "}
-              untuk penjelasan lengkap masing-masing indikator.
+              Berikan penilaian perbandingan antar indikator.
             </li>
             <li>
               <strong>Submit Form</strong>

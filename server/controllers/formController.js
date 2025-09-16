@@ -26,12 +26,31 @@ const createPairwiseMatrix = (pairwiseComparisons, criteria) => {
 };
 
 const calculateMeanMatrix = (matrices) => {
+  // if (!matrices.length) return [];
+  // const acc = matrices.reduce(
+  //   (sum, m) => math.add(sum, m),
+  //   math.zeros(matrices[0].length, matrices[0].length)
+  // );
+  // return math.divide(acc, matrices.length).toArray();
+
   if (!matrices.length) return [];
-  const acc = matrices.reduce(
-    (sum, m) => math.add(sum, m),
-    math.zeros(matrices[0].length, matrices[0].length)
-  );
-  return math.divide(acc, matrices.length).toArray();
+  const n = matrices[0].length;
+  const m = matrices[0][0].length;
+
+  // Inisialisasi matrix hasil
+  const result = Array.from({ length: n }, () => Array(m).fill(1));
+
+  // Untuk setiap sel (i,j), hitung geometric mean antar responden
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      let product = 1;
+      for (let r = 0; r < matrices.length; r++) {
+        product *= matrices[r][i][j] || 1; // fallback 1 kalau undefined
+      }
+      result[i][j] = Math.pow(product, 1 / matrices.length);
+    }
+  }
+  return result;
 };
 
 const normalizeMatrix = (matrix) => {

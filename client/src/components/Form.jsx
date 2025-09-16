@@ -201,13 +201,13 @@ const Form = () => {
     const CR_ISL = calculateCR(matrixISL, weightsISL);
 
     // kalau CR > 0.1, minta konfirmasi
-    if (CR_IFE > 0.1 || CR_ISL > 0.1) {
-      const confirmSubmit = window.confirm(
-        `CR melebihi 0.1 (IFE=${CR_IFE.toFixed(3)}, ISL=${CR_ISL.toFixed(3)}).\n` +
-        "Apakah Anda yakin ingin tetap submit?"
-      );
-      if (!confirmSubmit) return; // batal submit
-    }
+    // if (CR_IFE > 0.1 || CR_ISL > 0.1) {
+    //   const confirmSubmit = window.confirm(
+    //     `CR melebihi 0.1 (IFE=${CR_IFE.toFixed(3)}, ISL=${CR_ISL.toFixed(3)}).\n` +
+    //     "Apakah Anda yakin ingin tetap submit?"
+    //   );
+    //   if (!confirmSubmit) return; // batal submit
+    // }
 
     const data = {
       name,
