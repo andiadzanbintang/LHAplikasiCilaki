@@ -88,7 +88,6 @@ const IndicatorTable = ({ indicators, refresh, setIndicators }) => {
 
   return (
     <div className="indicator-container">
-      <h2>Indicators</h2>
 
       {/* Form Add/Edit */}
       <form onSubmit={isEditing ? handleEdit : handleAdd} className="indicator-form">

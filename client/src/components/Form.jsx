@@ -200,12 +200,13 @@ const Form = () => {
     const weightsISL = calculateWeights(matrixISL);
     const CR_ISL = calculateCR(matrixISL, weightsISL);
 
-    console.log("CR IFE:", CR_IFE, "CR ISL:", CR_ISL);
-
+    // kalau CR > 0.1, minta konfirmasi
     if (CR_IFE > 0.1 || CR_ISL > 0.1) {
-      return toast.error(
-        `Konsistensi terlalu rendah. CR IFE=${CR_IFE.toFixed(3)}, CR ISL=${CR_ISL.toFixed(3)}`
+      const confirmSubmit = window.confirm(
+        `CR melebihi 0.1 (IFE=${CR_IFE.toFixed(3)}, ISL=${CR_ISL.toFixed(3)}).\n` +
+        "Apakah Anda yakin ingin tetap submit?"
       );
+      if (!confirmSubmit) return; // batal submit
     }
 
     const data = {
@@ -215,6 +216,7 @@ const Form = () => {
       level_1: adjustedLevel1,
       level_2: adjustedLevel2,
       level_3: adjustedLevel3,
+      cr: { IFE: CR_IFE, ISL: CR_ISL },
     };
 
     try {
@@ -260,7 +262,7 @@ const Form = () => {
       {IFE_KEYS.map((k1, i) =>
         IFE_KEYS.slice(i + 1).map((k2) => (
           <div className="comparison" key={`${k1}_${k2}`}>
-            <label>{IFE_MAP[k1]?.name || k1}</label>
+            <label title={`${IFE_MAP[k1]?.name} - ${IFE_MAP[k1]?.description}`} style={{ cursor: "help" }}>{IFE_MAP[k1]?.name || k1}</label>
             <div className="range-container">
               <CustomSlider
                 onChange={(newValue) =>
@@ -269,7 +271,7 @@ const Form = () => {
               />
               <p className="slider-value">Nilai: {showValue(level3[`${k1}_${k2}`] ?? 1)}</p>
             </div>
-            <label>{IFE_MAP[k2]?.name || k2}</label>
+            <label  title={`${IFE_MAP[k2]?.name} - ${IFE_MAP[k2]?.description}`} style={{ cursor: "help" }}>{IFE_MAP[k2]?.name || k2}</label>
           </div>
         ))
       )}
@@ -278,8 +280,8 @@ const Form = () => {
       <h3>Perbandingan Indikator ISL</h3>
       {ISL_KEYS.map((k1, i) =>
         ISL_KEYS.slice(i + 1).map((k2) => (
-          <div className="comparison" key={`${k1}_${k2}`}>
-            <label>{ISL_MAP[k1]?.name || k1}</label>
+          <div className="comparison" key={`${k1}_${k2}`}> 
+            <label title={`${ISL_MAP[k1]?.name} - ${ISL_MAP[k1]?.description}`} style={{ cursor: "help" }}>{ISL_MAP[k1]?.name || k1}</label>
             <div className="range-container">
               <CustomSlider
                 onChange={(newValue) =>
@@ -288,15 +290,15 @@ const Form = () => {
               />
               <p className="slider-value">Nilai: {showValue(level3[`${k1}_${k2}`] ?? 1)}</p>
             </div>
-            <label>{ISL_MAP[k2]?.name || k2}</label>
+            <label title={`${ISL_MAP[k2]?.name} - ${ISL_MAP[k2]?.description}`} style={{ cursor: "help" }}>{ISL_MAP[k2]?.name || k2}</label>
           </div>
         ))
       )}
 
-      <button type="submit">Submit</button>
+      <button type="submit" className="submit-btn">Submit</button>
 
       {/* Floating CR Panel */}
-      <div
+      {/* <div
         className="floating-cr"
         style={{
           position: "fixed",
@@ -321,7 +323,7 @@ const Form = () => {
           {crISL > 0.1 && <span style={{ color: "red" }}>❌</span>}
           {crISL <= 0.1 && <span style={{ color: "green" }}>✔</span>}
         </p>
-      </div>
+      </div> */}
     </form>
   );
 };

@@ -14,9 +14,9 @@ const Navbar = () => {
         <li className={`navbar-item ${isActive("/form")}`}>
           <Link to="/form">Form</Link>
         </li>
-        <li className={`navbar-item ${isActive("/indikator")}`}>
+        {/* <li className={`navbar-item ${isActive("/indikator")}`}>
           <Link to="/indikator">Indikator</Link>
-        </li>
+        </li> */}
       </ul>
     </nav>
   );

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import IndicatorTable from "../components/IndicatorTable";
+import ComparisonTable from "../components/ComparisonTable";
+import SetIteration from "../components/SetIteration";
 
 const AdminDashboard = () => {
   const [indicators, setIndicators] = useState([]);
@@ -34,16 +36,30 @@ const AdminDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1>Admin Dashboard</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <IndicatorTable
-          indicators={indicators}
-          setIndicators={setIndicators} // 👉 oper ke child
-          refresh={fetchIndicators}     // kalau mau tetap ada opsi refresh
-        />
-      )}
+      <h1 className="dashboard-title">📊 Admin Dashboard</h1>
+
+      <div className="dashboard-section">
+        <h2>Manajemen Indikator</h2>
+        {loading ? (
+          <p>Loading indikator...</p>
+        ) : (
+          <IndicatorTable
+            indicators={indicators}
+            setIndicators={setIndicators}
+            refresh={fetchIndicators}
+          />
+        )}
+      </div>
+
+      <div className="dashboard-section">
+        <h2>Evaluasi Penilaian</h2>
+        <ComparisonTable />
+      </div>
+
+      <div className="dashboard-section">
+        <h2>Atur Iterasi</h2>
+        <SetIteration />
+      </div>
     </div>
   );
 };

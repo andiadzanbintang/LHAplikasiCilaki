@@ -1,8 +1,15 @@
 const AdminModel = require('../models/adminModel');
 const IndicatorModel = require('../models/indicatorModel')
+const AHPResult = require("../models/resultModel");
+const ComparisonModel = require('../models/Comparison');
 const FormConfig = require('../models/formConfig');
 const jwt = require('jsonwebtoken');
 const mongoSanitize = require('mongo-sanitize');
+const createPairwiseMatrix = require('./formController').createPairwiseMatrix;
+const calculateMeanMatrix = require('./formController').calculateMeanMatrix;
+const normalizeMatrix = require('./formController').normalizeMatrix;
+const calculateWeights = require('./formController').calculateWeights;
+const filterPairsFor = require('./formController').filterPairsFor;
 require('dotenv').config();
 
 // Login
@@ -74,12 +81,12 @@ const logoutAdmin = async (req, res) => {
 
 const getIteration = async (req, res) => {
     try {
-      const admin = req.admin;
-      if (!admin) {
-        return res.status(401).json({ status: 401, message: "Unauthorized" });
-      }
+      // const admin = req.admin;
+      // if (!admin) {
+      //   return res.status(401).json({ status: 401, message: "Unauthorized" });
+      // }
   
-      const iterationData = await formConfig.findOne(); // Ambil dokumen pertama
+      const iterationData = await FormConfig.findOne(); // Ambil dokumen pertama
       if (!iterationData) {
         return res.status(404).json({
           status: 404,
@@ -104,10 +111,10 @@ const getIteration = async (req, res) => {
 // Endpoint untuk edit iterasi
 const editIteration = async (req, res) => {
   try {
-    const admin = req.admin; // Pastikan user adalah admin
-    if (!admin) {
-      return res.status(401).json({ status: 401, message: "Unauthorized" });
-    }
+    // const admin = req.admin; // Pastikan user adalah admin
+    // if (!admin) {
+    //   return res.status(401).json({ status: 401, message: "Unauthorized" });
+    // }
 
     const { iteration } = req.body;
 
@@ -120,7 +127,7 @@ const editIteration = async (req, res) => {
     }
 
     // Cari dan perbarui iterasi di database
-    const updatedConfig = await formConfig.findOneAndUpdate(
+    const updatedConfig = await FormConfig.findOneAndUpdate(
       {}, // Update dokumen pertama
       { iteration },
       { new: true, upsert: true } // Buat dokumen baru jika tidak ada
@@ -232,6 +239,91 @@ const deleteIndicator = async (req, res) => {
   }
 }
 
+// Bagian Evaluasi Penilaian
+const getAllComparisons = async (req, res) => {
+  try {
+    const comparisons = await ComparisonModel.find();
+    if (!comparisons?.length) return res.status(404).json({status:404, message: "No comparisons found", data: [] });
+    res.status(200).json({ status:200, message: "success", data: comparisons });
+  } catch (error) {
+    console.error("getAllComparisons error:", error);
+    res.status(500).json({
+      status:500, message: "An error occurred while fetching comparisons.",
+    });
+  }
+};
+
+const deleteComparison = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedComparison = await ComparisonModel.findByIdAndDelete(id);
+    if (!deletedComparison) {
+      return res.status(404).json({ status:404, message: "Comparison not found" });
+    }
+
+    // Recalculate AHP untuk iteration yang terkait
+    const iteration = deletedComparison.iteration;
+    await recalculateAHP(iteration);
+
+    res.status(200).json({ status:200, message: "Comparison deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ status:500, message: "Server error" });
+  } 
+}
+
+// di atas, sebelum module.exports
+const recalculateAHP = async (iteration) => {
+  const allIndicators = await IndicatorModel.find({}, { name: 1, category: 1 }).lean();
+  const IFE_KEYS = allIndicators.filter((x) => x.category === "IFE").map((x) => x.name);
+  const ISL_KEYS = allIndicators.filter((x) => x.category === "ISL").map((x) => x.name);
+  const IFE_SET = new Set(IFE_KEYS);
+  const ISL_SET = new Set(ISL_KEYS);
+
+  const forms = await ComparisonModel.find({ iteration });
+  if (!forms?.length) {
+    // Kalau kosong, hapus AHPResult untuk iteration ini
+    await AHPResult.deleteOne({ iteration });
+    return null;
+  }
+
+  const level3MatricesIFE = forms.map((f) => {
+    const allPairs = f.level_3?.[0]?.pairwise_comparison || [];
+    const pairsIFE = filterPairsFor(allPairs, IFE_SET);
+    return createPairwiseMatrix(pairsIFE, IFE_KEYS);
+  });
+
+  const level3MatricesISL = forms.map((f) => {
+    const allPairs = f.level_3?.[0]?.pairwise_comparison || [];
+    const pairsISL = filterPairsFor(allPairs, ISL_SET);
+    return createPairwiseMatrix(pairsISL, ISL_KEYS);
+  });
+
+  const meanIFE = calculateMeanMatrix(level3MatricesIFE);
+  const normIFE = normalizeMatrix(meanIFE);
+  const wIFE = calculateWeights(normIFE);
+
+  const meanISL = calculateMeanMatrix(level3MatricesISL);
+  const normISL = normalizeMatrix(meanISL);
+  const wISL = calculateWeights(normISL);
+
+  const level3Weights = {};
+  IFE_KEYS.forEach((k, i) => (level3Weights[k] = wIFE?.[i] ?? 0));
+  ISL_KEYS.forEach((k, i) => (level3Weights[k] = wISL?.[i] ?? 0));
+
+  const level1Weights = { IFE: 1, ISL: 1 };
+  const level2Weights = { Financial: 1, Economy: 1, Social: 1, Environment: 1 };
+
+  await AHPResult.findOneAndUpdate(
+    { iteration },
+    { iteration, level1Weights, level2Weights, level3Weights },
+    { upsert: true, new: true }
+  );
+
+  return { iteration, level1Weights, level2Weights, level3Weights };
+};
+
+
+
 
 module.exports = { 
   loginAdmin, 
@@ -242,4 +334,6 @@ module.exports = {
   addIndicator,
   editIndicator,
   deleteIndicator,
+  getAllComparisons,
+  deleteComparison,
 };

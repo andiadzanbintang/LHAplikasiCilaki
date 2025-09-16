@@ -21,7 +21,12 @@ const comparisonSchema = new mongoose.Schema({
   instansi:{type:String, required:true},
   level_1: levelSchema,                          // Level 1: Perbandingan IFE dan ISL
   level_2: [levelSchema],                        // Array untuk menyimpan level 2: Finansial vs Ekonomi, Sosial vs Lingkungan
-  level_3: [levelSchema]                         // Array untuk menyimpan level 3: Perbandingan antar indikator di setiap sub-kriteria
-});
+  level_3: [levelSchema],                         // Array untuk menyimpan level 3: Perbandingan antar indikator di setiap sub-kriteria
+    // >>> Tambahan untuk simpan Consistency Ratio <<<
+  cr: {
+    IFE: { type: Number, default: 0 }, // Consistency Ratio untuk matriks IFE
+    ISL: { type: Number, default: 0 }  // Consistency Ratio untuk matriks ISL
+  },
+}, { timestamps: true });
  
-module.exports = mongoose.model('Comparison', comparisonSchema);
+module.exports = mongoose.model('Comparison', comparisonSchema); 

@@ -63,7 +63,7 @@ const filterPairsFor = (pairs, validKeysSet) =>
 const submitPairwiseComparison = async (req, res) => {
   try {
     const sanitized = mongoSanitize(req.body);
-    const { name, title, instansi, level_1, level_2, level_3, city } = sanitized;
+    const { name, title, instansi, level_1, level_2, level_3, cr} = sanitized;
 
     // Ambil current iteration (sesi) dari Config
     const cfg = await Config.findOne({});
@@ -118,11 +118,11 @@ const submitPairwiseComparison = async (req, res) => {
       name,
       title,
       instansi,
-      city,
       iteration,
       level_1: newLevel1,
       level_2: newLevel2,
       level_3: newLevel3,
+      cr: { IFE: cr?.IFE || 0, ISL: cr?.ISL || 0 },
     });
 
     await doc.save();
@@ -143,7 +143,7 @@ const submitPairwiseComparison = async (req, res) => {
 // Controller: Hitung AHP
 // ===========================
 const calculateAHPWeights = async (req, res) => {
-  try {
+  try { 
     // Ambil indikator dinamis (untuk mapping kategori & daftar kunci)
     const allIndicators = await Indicator.find({}, { name: 1, category: 1 }).lean();
     const IFE_KEYS = allIndicators.filter((x) => x.category === "IFE").map((x) => x.name);
@@ -272,4 +272,9 @@ module.exports = {
   calculateAHPWeights,
   getAllComparisons,
   getAllWeights,
+  createPairwiseMatrix,
+  calculateMeanMatrix,
+  normalizeMatrix,
+  calculateWeights,
+  filterPairsFor,
 };
